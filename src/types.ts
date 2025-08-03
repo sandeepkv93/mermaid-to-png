@@ -4,6 +4,8 @@ export interface ConversionOptions {
   quality: number;
   scale: number;
   verbose?: boolean;
+  validateOnly?: boolean;
+  autoFix?: boolean;
 }
 
 export interface ConversionResult {

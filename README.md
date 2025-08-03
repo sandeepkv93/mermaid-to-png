@@ -34,6 +34,9 @@ mermaid-to-png [options] <markdown-file>
 - `-f, --format <format>` - Image format: `png` or `jpeg` (default: `png`)
 - `-q, --quality <number>` - JPEG quality 1-100 (default: `85`, only applies to JPEG)
 - `-s, --scale <number>` - Device scale factor for higher resolution 1-5 (default: `2`)
+- `-v, --verbose` - Enable verbose logging
+- `--validate-only` - Only validate Mermaid syntax without converting
+- `--auto-fix` - Attempt to automatically fix common Mermaid syntax issues
 - `-V, --version` - Output the version number
 - `-h, --help` - Display help for command
 
@@ -57,6 +60,21 @@ mermaid-to-png document.md --output ./assets/diagrams
 Generate high-resolution images:
 ```bash
 mermaid-to-png document.md --scale 3
+```
+
+Validate Mermaid syntax without converting:
+```bash
+mermaid-to-png document.md --validate-only
+```
+
+Auto-fix common syntax issues and convert:
+```bash
+mermaid-to-png document.md --auto-fix
+```
+
+Verbose mode with auto-fix:
+```bash
+mermaid-to-png document.md --auto-fix --verbose
 ```
 
 ## How It Works
@@ -90,6 +108,33 @@ Here's a flowchart:
 
 ![Mermaid Diagram 1](./images/document-diagram-1.png)
 ```
+
+## Auto-Fix Feature
+
+The tool can automatically fix common Mermaid syntax issues that cause parsing errors:
+
+### Supported Fixes
+
+- **Parentheses in node labels**: `(N-1)` → `N-1`
+- **Mathematical expressions**: `(X+Y)` → `X+Y`
+- **Range notation**: `1B-2B-3B` → `1B to 2B to 3B` (in video/data contexts)
+- **Arrow spacing**: `A-->B` → `A --> B`
+- **Subgraph formatting**: Ensures proper quote formatting
+
+### Usage
+
+```bash
+# Validate only (shows issues without fixing)
+mermaid-to-png document.md --validate-only
+
+# Auto-fix and convert
+mermaid-to-png document.md --auto-fix
+
+# See what's being fixed
+mermaid-to-png document.md --auto-fix --verbose
+```
+
+**⚠️ Important**: Auto-fix modifies your original markdown file. Consider backing up your files or using version control before running with `--auto-fix`.
 
 ## Development
 

@@ -18,13 +18,24 @@ program
   .option('-q, --quality <number>', 'JPEG quality (1-100, only for jpeg format)', '85')
   .option('-s, --scale <number>', 'Device scale factor for higher resolution', '2')
   .option('-v, --verbose', 'Enable verbose logging', false)
+  .option('--validate-only', 'Only validate Mermaid syntax without converting', false)
+  .option('--auto-fix', 'Attempt to automatically fix common Mermaid syntax issues', false)
   .action(async (markdownFile: string, options) => {
     try {
-      console.log(chalk.blue('🚀 Starting Mermaid to PNG conversion...'));
+      if (options.validateOnly) {
+        console.log(chalk.blue('🔍 Validating Mermaid syntax...'));
+      } else {
+        console.log(chalk.blue('🚀 Starting Mermaid to PNG conversion...'));
+      }
       
       const validatedOptions = await validateInput(markdownFile, options);
       
       const result = await convertMarkdownFile(markdownFile, validatedOptions);
+      
+      if (options.validateOnly) {
+        // Validation results already printed in converter
+        return;
+      }
       
       console.log(chalk.green(`✅ Successfully converted ${result.convertedCount} Mermaid diagram(s)`));
       console.log(chalk.green(`📄 Output file: ${result.outputFile}`));

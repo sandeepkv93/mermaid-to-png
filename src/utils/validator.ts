@@ -43,6 +43,8 @@ export async function validateInput(
     format: format || 'png',
     quality: quality || 85,
     scale: scale || 2,
-    verbose: options.verbose || false
+    verbose: options.verbose || false,
+    validateOnly: options.validateOnly || false,
+    autoFix: options.autoFix || false
   };
 }

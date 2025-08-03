@@ -27,7 +27,9 @@ describe('validateInput', () => {
       format: 'png',
       quality: 85,
       scale: 2,
-      verbose: false
+      verbose: false,
+      validateOnly: false,
+      autoFix: false
     });
   });
 
