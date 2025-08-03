@@ -118,6 +118,7 @@ The tool can automatically fix common Mermaid syntax issues that cause parsing e
 - **Parentheses in node labels**: `(N-1)` → `N-1`
 - **Mathematical expressions**: `(X+Y)` → `X+Y`
 - **Range notation**: `1B-2B-3B` → `1B to 2B to 3B` (in video/data contexts)
+- **Malformed arrows**: `MS --> >API` → `MS --> API`
 - **Arrow spacing**: `A-->B` → `A --> B`
 - **Subgraph formatting**: Ensures proper quote formatting
 
@@ -160,14 +161,24 @@ npm install
 ```
 mermaid-to-png/
 ├── src/
+│   ├── __tests__/          # Integration tests
+│   │   ├── fixtures/       # Test markdown files
+│   │   └── integration.test.ts
 │   ├── cli.ts              # CLI entry point
 │   ├── converter.ts        # Main conversion logic
+│   ├── converter.test.ts   # Unit tests for converter
 │   ├── mermaid-renderer.ts # Puppeteer-based rendering
+│   ├── mermaid-renderer.test.ts # Unit tests for renderer
 │   ├── types.ts           # TypeScript type definitions
 │   └── utils/
-│       └── validator.ts    # Input validation
+│       ├── validator.ts    # Input validation
+│       ├── validator.test.ts # Unit tests for validator
+│       ├── mermaid-fixer.ts # Auto-fix utilities
+│       └── mermaid-fixer.test.ts # Unit tests for fixer
 ├── dist/                   # Compiled JavaScript
 ├── jest.config.js         # Jest configuration
+├── jest.integration.config.js # Integration test config
+├── LICENSE                # MIT license
 └── tsconfig.json          # TypeScript configuration
 ```
 
