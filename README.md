@@ -1,0 +1,136 @@
+# Mermaid to PNG
+
+A command-line tool that converts Mermaid diagrams in markdown files to PNG/JPEG images.
+
+## Features
+
+- Automatically finds and converts all Mermaid code blocks in markdown files
+- Supports PNG and JPEG output formats
+- Customizable image quality and scale
+- Preserves original markdown structure
+- Production-ready with comprehensive test coverage
+
+## Installation
+
+```bash
+npm install -g mermaid-to-png
+```
+
+Or run directly with npx:
+
+```bash
+npx mermaid-to-png your-file.md
+```
+
+## Usage
+
+```bash
+mermaid-to-png [options] <markdown-file>
+```
+
+### Options
+
+- `-o, --output <path>` - Directory to save generated images (default: `./images`)
+- `-f, --format <format>` - Image format: `png` or `jpeg` (default: `png`)
+- `-q, --quality <number>` - JPEG quality 1-100 (default: `85`, only applies to JPEG)
+- `-s, --scale <number>` - Device scale factor for higher resolution 1-5 (default: `2`)
+- `-V, --version` - Output the version number
+- `-h, --help` - Display help for command
+
+### Examples
+
+Convert a markdown file with default settings:
+```bash
+mermaid-to-png document.md
+```
+
+Convert to JPEG with custom quality:
+```bash
+mermaid-to-png document.md --format jpeg --quality 95
+```
+
+Save images to a specific directory:
+```bash
+mermaid-to-png document.md --output ./assets/diagrams
+```
+
+Generate high-resolution images:
+```bash
+mermaid-to-png document.md --scale 3
+```
+
+## How It Works
+
+1. The tool reads your markdown file and finds all Mermaid code blocks
+2. Each Mermaid diagram is rendered to an image using Puppeteer
+3. The original Mermaid code blocks are replaced with image references
+4. A new markdown file is created with `-converted` suffix
+5. All images are saved to the specified output directory
+
+### Example
+
+Input markdown:
+````markdown
+# My Document
+
+Here's a flowchart:
+
+```mermaid
+graph TD
+    A[Start] --> B[Process]
+    B --> C[End]
+```
+````
+
+Output markdown:
+```markdown
+# My Document
+
+Here's a flowchart:
+
+![Mermaid Diagram 1](./images/document-diagram-1.png)
+```
+
+## Development
+
+### Setup
+
+```bash
+git clone <repository>
+cd mermaid-to-png
+npm install
+```
+
+### Scripts
+
+- `npm run build` - Build the TypeScript project
+- `npm run dev` - Run in development mode
+- `npm test` - Run unit tests
+- `npm run test:integration` - Run integration tests
+- `npm run test:coverage` - Run tests with coverage report
+- `npm run lint` - Type check the code
+
+### Project Structure
+
+```
+mermaid-to-png/
+├── src/
+│   ├── cli.ts              # CLI entry point
+│   ├── converter.ts        # Main conversion logic
+│   ├── mermaid-renderer.ts # Puppeteer-based rendering
+│   ├── types.ts           # TypeScript type definitions
+│   └── utils/
+│       └── validator.ts    # Input validation
+├── dist/                   # Compiled JavaScript
+├── jest.config.js         # Jest configuration
+└── tsconfig.json          # TypeScript configuration
+```
+
+## Requirements
+
+- Node.js 14 or higher
+- npm or yarn
+
+## License
+
+MIT

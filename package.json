@@ -1,0 +1,40 @@
+{
+  "name": "mermaid-to-png",
+  "version": "1.0.0",
+  "description": "CLI tool to convert Mermaid diagrams in markdown files to PNG images",
+  "main": "dist/index.js",
+  "bin": {
+    "mermaid-to-png": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/cli.ts",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:integration": "jest --config jest.integration.config.js",
+    "test:all": "npm test && npm run test:integration",
+    "lint": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": ["mermaid", "markdown", "png", "cli", "converter"],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "@types/marked": "^5.0.2",
+    "@types/node": "^24.1.0",
+    "chalk": "^5.4.1",
+    "commander": "^14.0.0",
+    "marked": "^16.1.1",
+    "puppeteer": "^24.15.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.2"
+  },
+  "devDependencies": {
+    "@jest/globals": "^30.0.5",
+    "@types/jest": "^30.0.0",
+    "jest": "^30.0.5",
+    "ts-jest": "^29.4.1"
+  }
+}
