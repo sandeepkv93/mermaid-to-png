@@ -21,12 +21,16 @@ describe('mermaid-renderer', () => {
     };
 
     mockPage = {
+      setDefaultTimeout: jest.fn(() => Promise.resolve()),
       setViewport: jest.fn(() => Promise.resolve()),
       setContent: jest.fn(() => Promise.resolve()),
       waitForSelector: jest.fn(() => Promise.resolve()),
+      waitForFunction: jest.fn(() => Promise.resolve()),
+      evaluate: jest.fn(() => Promise.resolve(null)),
       $: jest.fn(() => Promise.resolve(mockElement)),
       screenshot: jest.fn(() => Promise.resolve()),
-      close: jest.fn(() => Promise.resolve())
+      close: jest.fn(() => Promise.resolve()),
+      on: jest.fn()
     };
 
     mockBrowser = {
@@ -59,13 +63,21 @@ describe('mermaid-renderer', () => {
     });
 
     expect(mockPage.setViewport).toHaveBeenCalledWith({
-      width: 1200,
-      height: 800,
+      width: 2400,
+      height: 1600,
       deviceScaleFactor: 2
     });
 
     expect(mockPage.setContent).toHaveBeenCalledWith(
-      expect.stringContaining(mermaidCode)
+      expect.stringContaining(mermaidCode),
+      { waitUntil: 'networkidle0' }
+    );
+
+    expect(mockPage.setDefaultTimeout).toHaveBeenCalledWith(60000);
+    
+    expect(mockPage.waitForFunction).toHaveBeenCalledWith(
+      'window.renderComplete || window.renderError',
+      { timeout: 45000 }
     );
 
     expect(mockPage.screenshot).toHaveBeenCalledWith({
@@ -120,6 +132,7 @@ describe('mermaid-renderer', () => {
 
   it('should throw error when diagram element not found', async () => {
     mockPage.$ = jest.fn(() => Promise.resolve(null));
+    mockPage.evaluate = jest.fn(() => Promise.resolve(null));
 
     await expect(renderMermaidToPng('graph TD', '/tmp/test.png', {
       output: '/tmp',
@@ -131,6 +144,7 @@ describe('mermaid-renderer', () => {
 
   it('should throw error when bounding box not available', async () => {
     mockElement.boundingBox = jest.fn(() => Promise.resolve(null));
+    mockPage.evaluate = jest.fn(() => Promise.resolve(null));
 
     await expect(renderMermaidToPng('graph TD', '/tmp/test.png', {
       output: '/tmp',
@@ -138,6 +152,17 @@ describe('mermaid-renderer', () => {
       quality: 85,
       scale: 2
     })).rejects.toThrow('Failed to get diagram dimensions');
+  });
+
+  it('should throw error when Mermaid render fails', async () => {
+    mockPage.evaluate = jest.fn(() => Promise.resolve('Mermaid syntax error'));
+
+    await expect(renderMermaidToPng('graph TD', '/tmp/test.png', {
+      output: '/tmp',
+      format: 'png',
+      quality: 85,
+      scale: 2
+    })).rejects.toThrow('Mermaid render failed: Mermaid syntax error');
   });
 
   it('should close browser when closeBrowser is called', async () => {

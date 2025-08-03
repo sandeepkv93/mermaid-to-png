@@ -99,5 +99,6 @@ describe('validateInput', () => {
     });
 
     expect(result.format).toBe('png');
+    expect(result.verbose).toBe(false);
   });
 });
